@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import {ItemClickEvent} from 'devextreme/ui/tree_view';
 import {DxTreeViewModule, DxTreeViewComponent} from 'devextreme-angular/ui/tree-view';
-import {navigation} from '../../../app-navigation';
+import {navigation} from '../../../constants/app-navigation.constant';
 
 import * as events from 'devextreme/events';
 

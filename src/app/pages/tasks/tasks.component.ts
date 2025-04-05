@@ -1,8 +1,15 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import 'devextreme/data/odata/store';
+import {DxDataGridModule} from "devextreme-angular";
+import {CommonModule} from "@angular/common";
 
 @Component({
-  templateUrl: 'tasks.component.html'
+  templateUrl: 'tasks.component.html',
+  standalone: true,
+  imports: [
+    DxDataGridModule,
+    CommonModule
+  ],
 })
 
 export class TasksComponent {
@@ -10,6 +17,7 @@ export class TasksComponent {
   priority: any[] = [];
 
   constructor() {
+
     this.dataSource = {
       store: {
         type: 'odata',
@@ -28,11 +36,13 @@ export class TasksComponent {
         'ResponsibleEmployee/Employee_Full_Name'
       ]
     };
+
     const priority = [
-      { name: 'High', value: 4 },
-      { name: 'Urgent', value: 3 },
-      { name: 'Normal', value: 2 },
-      { name: 'Low', value: 1 }
+      {name: 'High', value: 4},
+      {name: 'Urgent', value: 3},
+      {name: 'Normal', value: 2},
+      {name: 'Low', value: 1}
     ];
+
   }
 }

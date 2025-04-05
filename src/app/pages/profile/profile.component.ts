@@ -2,33 +2,17 @@ import {Component, inject, OnInit} from '@angular/core';
 import {AuthService} from "../../shared/services";
 import {IEmployee} from "../../interfaces/employee.interface";
 import {GetUserResponseInterface} from "../../interfaces/get-user-response.interface";
+import {defaultColumnCountValues, defaultEmployeeValues, ScreenSizeType} from "../../constants";
+import {DxFormModule} from "devextreme-angular";
 
-const defaultEmployeeValues: IEmployee = {
-  ID: 0,
-  DisplayName: '',
-  FirstName: '',
-  LastName: '',
-  PhoneNumber: '',
-  Prefix: '',
-  Position: '',
-  Picture: '',
-  BirthDate: null,
-  HireDate: null,
-  AssignedTasks: 0,
-  Notes: '',
-  Address: ''
-};
-
-const defaultColumnCountValues: Record<'xs' | 'sm' | 'md' | 'lg', number> = {
-  xs: 1,
-  sm: 2,
-  md: 3,
-  lg: 4
-};
 
 @Component({
   templateUrl: 'profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
+  standalone: true,
+  imports: [
+    DxFormModule
+  ]
 })
 export class ProfileComponent implements OnInit {
 
@@ -37,7 +21,7 @@ export class ProfileComponent implements OnInit {
 
   // vars
   employee: IEmployee = defaultEmployeeValues;
-  colCountByScreen: Record<'xs' | 'sm' | 'md' | 'lg', number> = defaultColumnCountValues;
+  colCountByScreen: Record<ScreenSizeType, number> = defaultColumnCountValues;
 
   async ngOnInit() {
     const res: GetUserResponseInterface = await this.authService.getUser();

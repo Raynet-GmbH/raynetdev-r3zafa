@@ -1,17 +1,32 @@
-import {Component, HostBinding} from '@angular/core';
+import {Component, HostBinding, inject} from '@angular/core';
 import {AuthService, ScreenService, AppInfoService} from './shared/services';
+import {FooterComponent, UnauthenticatedContentComponent} from "./shared/components";
+import {SideNavOuterToolbarComponent, SingleCardComponent} from "./layouts";
+import {RouterOutlet} from "@angular/router";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [
+    UnauthenticatedContentComponent,
+    SideNavOuterToolbarComponent,
+    RouterOutlet,
+    FooterComponent,
+    NgIf
+  ],
 })
 export class AppComponent {
+
+  private authService: AuthService = inject(AuthService);
+  private screen: ScreenService = inject(ScreenService);
+  public appInfo: AppInfoService = inject(AppInfoService);
+
+
   @HostBinding('class') get getClass() {
     return Object.keys(this.screen.sizes).filter(cl => this.screen.sizes[cl]).join(' ');
-  }
-
-  constructor(private authService: AuthService, private screen: ScreenService, public appInfo: AppInfoService) {
   }
 
   isAuthenticated() {

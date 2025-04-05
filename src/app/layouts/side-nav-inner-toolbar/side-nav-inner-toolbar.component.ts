@@ -1,13 +1,11 @@
-import {Component, OnInit, Input, ViewChild} from '@angular/core';
-import {ScreenService} from '../../shared/services';
+import {Component, ViewChild} from '@angular/core';
 import {ItemClickEvent as TreeViewItemClickEvent} from 'devextreme/ui/tree_view';
 import {ItemClickEvent as ToolbarItemClickEvent} from 'devextreme/ui/toolbar';
 import {DxScrollViewComponent, DxScrollViewModule} from 'devextreme-angular/ui/scroll-view';
-
-import {Router, NavigationEnd} from '@angular/router';
 import {DxDrawerModule, DxToolbarModule} from "devextreme-angular";
 import {HeaderComponent, SideNavigationMenuComponent} from "../../shared/components";
 import {NgIf} from "@angular/common";
+import {SideNavBaseComponent} from "../side-nav-base/side-nav-base.component";
 
 @Component({
   selector: 'app-side-nav-inner-toolbar',
@@ -23,59 +21,13 @@ import {NgIf} from "@angular/common";
   ],
   styleUrls: ['./side-nav-inner-toolbar.component.scss']
 })
-export class SideNavInnerToolbarComponent implements OnInit {
+export class SideNavInnerToolbarComponent extends SideNavBaseComponent {
   @ViewChild(DxScrollViewComponent, {static: true}) scrollView!: DxScrollViewComponent;
-  selectedRoute = '';
 
-  menuOpened!: boolean;
-  temporaryMenuOpened = false;
-
-  @Input()
-  title!: string;
-
-  menuMode = 'shrink';
-  menuRevealMode = 'expand';
-  minMenuSize = 0;
-  shaderEnabled = false;
-
-  constructor(private screen: ScreenService, private router: Router) {
-  }
-
-  ngOnInit() {
-    this.menuOpened = this.screen.sizes['screen-large'];
-
-    this.router.events.subscribe(val => {
-      if (val instanceof NavigationEnd) {
-        this.selectedRoute = val.urlAfterRedirects.split('?')[0];
-      }
-    });
-
-    this.screen.changed.subscribe(() => this.updateDrawer());
-
-    this.updateDrawer();
-  }
-
-  updateDrawer() {
-    const isXSmall = this.screen.sizes['screen-x-small'];
-    const isLarge = this.screen.sizes['screen-large'];
-
-    this.menuMode = isLarge ? 'shrink' : 'overlap';
-    this.menuRevealMode = isXSmall ? 'slide' : 'expand';
-    this.minMenuSize = isXSmall ? 0 : 60;
-    this.shaderEnabled = !isLarge;
-  }
 
   toggleMenu = (e: ToolbarItemClickEvent) => {
     this.menuOpened = !this.menuOpened;
     e.event?.stopPropagation();
-  }
-
-  get hideMenuAfterNavigation() {
-    return this.menuMode === 'overlap' || this.temporaryMenuOpened;
-  }
-
-  get showMenuAfterClick() {
-    return !this.menuOpened;
   }
 
   navigationChanged(event: TreeViewItemClickEvent) {
@@ -86,7 +38,7 @@ export class SideNavInnerToolbarComponent implements OnInit {
       if (event.node?.selected) {
         pointerEvent?.preventDefault();
       } else {
-        this.router.navigate([path]);
+        this.router.navigate([path]).then();
         this.scrollView.instance.scrollTo(0);
       }
 
@@ -100,10 +52,4 @@ export class SideNavInnerToolbarComponent implements OnInit {
     }
   }
 
-  navigationClick() {
-    if (this.showMenuAfterClick) {
-      this.temporaryMenuOpened = true;
-      this.menuOpened = true;
-    }
-  }
 }

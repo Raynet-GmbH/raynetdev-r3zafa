@@ -1,15 +1,27 @@
-import themes from 'devextreme/ui/themes';
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import {enableProdMode} from '@angular/core';
+import {bootstrapApplication} from '@angular/platform-browser';
+import {AppComponent} from './app/app.component';
+import {provideRouter} from '@angular/router';
+import {provideAnimations} from '@angular/platform-browser/animations';
 
-import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
+import themes from 'devextreme/ui/themes';
+import {environment} from './environments/environment';
+import {routes} from "./app/app-routes";
+import {AppInfoService, AuthGuardService, AuthService, ScreenService} from "./app/shared/services";
 
 if (environment.production) {
   enableProdMode();
 }
 
 themes.initialized(() => {
-  platformBrowserDynamic().bootstrapModule(AppModule)
-    .catch(err => console.error(err));
+  bootstrapApplication(AppComponent, {
+    providers: [
+      provideRouter(routes),
+      provideAnimations(),
+      AuthService,
+      ScreenService,
+      AppInfoService,
+      AuthGuardService
+    ]
+  }).catch(err => console.error(err));
 });
