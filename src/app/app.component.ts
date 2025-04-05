@@ -34,4 +34,6 @@ export class AppComponent  {
 * - Handling Multiple Observable Streams
 * - refactor styles and move reusable stuff inside a separate folder
 * - add JS Documentation to code
+* - unit test is missing (define the .spec files for components)
+* - use base classes and extends new classes from base if possible
 * */
