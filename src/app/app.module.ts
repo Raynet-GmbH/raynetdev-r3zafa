@@ -1,12 +1,16 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-import { AppComponent } from './app.component';
-import { SideNavOuterToolbarModule, SideNavInnerToolbarModule, SingleCardModule } from './layouts';
-import { FooterModule, ResetPasswordFormModule, CreateAccountFormModule, ChangePasswordFormModule, LoginFormModule } from './shared/components';
-import { AuthService, ScreenService, AppInfoService } from './shared/services';
-import { UnauthenticatedContentModule } from './unauthenticated-content';
-import { AppRoutingModule } from './app-routing.module';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {AppComponent} from './app.component';
+import {SingleCardModule, SideNavOuterToolbarComponent, SideNavInnerToolbarComponent} from './layouts';
+import {
+  FooterComponent,
+  CreateAccountFormComponent,
+  ChangePasswordFormComponent,
+  LoginFormComponent, ResetPasswordFormComponent
+} from './shared/components';
+import {AuthService, ScreenService, AppInfoService} from './shared/services';
+import {UnauthenticatedContentModule} from './unauthenticated-content';
+import {AppRoutingModule} from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -14,16 +18,16 @@ import { AppRoutingModule } from './app-routing.module';
   ],
   imports: [
     BrowserModule,
-    SideNavOuterToolbarModule,
-    SideNavInnerToolbarModule,
     SingleCardModule,
-    FooterModule,
-    ResetPasswordFormModule,
-    CreateAccountFormModule,
-    ChangePasswordFormModule,
-    LoginFormModule,
     UnauthenticatedContentModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ChangePasswordFormComponent,
+    CreateAccountFormComponent,
+    FooterComponent,
+    SideNavOuterToolbarComponent,
+    SideNavInnerToolbarComponent,
+    LoginFormComponent,
+    ResetPasswordFormComponent,
   ],
   providers: [
     AuthService,
@@ -32,4 +36,5 @@ import { AppRoutingModule } from './app-routing.module';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

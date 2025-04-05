@@ -1,16 +1,9 @@
 import {inject, Injectable} from '@angular/core';
-import {CanActivate, Router, ActivatedRouteSnapshot} from '@angular/router';
+import {Router} from '@angular/router';
 import {IUser} from '../../interfaces/user.interface';
 import {GetUserResponseInterface} from "../../interfaces/get-user-response.interface";
+import {defaultPath, defaultUser} from "../../constants";
 
-
-const defaultPath = '/';
-const defaultUser: IUser = {
-  avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/07.png',
-  email: 'reza@example.com',
-  displayName: 'Reza',
-  phoneNumber: '+49 151 240 123 87'
-};
 
 @Injectable()
 export class AuthService {
@@ -26,7 +19,6 @@ export class AuthService {
   get loggedIn(): boolean {
     return !!this._user;
   }
-
 
 
   async getUser(): Promise<GetUserResponseInterface> {
@@ -121,31 +113,3 @@ export class AuthService {
   }
 }
 
-@Injectable()
-export class AuthGuardService implements CanActivate {
-
-  // injects
-  private authService: AuthService = inject(AuthService);
-  private router: Router = inject(Router);
-
-  canActivate(route: ActivatedRouteSnapshot): boolean {
-    const isLoggedIn = this.authService.loggedIn;
-    const isAuthForm = [
-      'login-form',
-      'reset-password',
-      'create-account',
-      'change-password/:recoveryCode'
-    ].includes(route.routeConfig?.path || defaultPath);
-
-    if (isLoggedIn && isAuthForm) {
-      this.authService.lastAuthenticatedPath = defaultPath;
-      this.router.navigate([defaultPath]).then();
-      return false;
-    }
-
-    if (!isLoggedIn && !isAuthForm) this.router.navigate(['/login-form']).then();
-    if (isLoggedIn) this.authService.lastAuthenticatedPath = route.routeConfig?.path || defaultPath;
-
-    return isLoggedIn || isAuthForm;
-  }
-}

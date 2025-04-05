@@ -1,17 +1,18 @@
-import { Component, HostBinding } from '@angular/core';
-import { AuthService, ScreenService, AppInfoService } from './shared/services';
+import {Component, HostBinding} from '@angular/core';
+import {AuthService, ScreenService, AppInfoService} from './shared/services';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent  {
+export class AppComponent {
   @HostBinding('class') get getClass() {
     return Object.keys(this.screen.sizes).filter(cl => this.screen.sizes[cl]).join(' ');
   }
 
-  constructor(private authService: AuthService, private screen: ScreenService, public appInfo: AppInfoService) { }
+  constructor(private authService: AuthService, private screen: ScreenService, public appInfo: AppInfoService) {
+  }
 
   isAuthenticated() {
     return this.authService.loggedIn;
@@ -36,4 +37,6 @@ export class AppComponent  {
 * - add JS Documentation to code
 * - unit test is missing (define the .spec files for components)
 * - use base classes and extends new classes from base if possible
+* - move each class to its own file (do not define multiple classes in one file)
+* - move app to standalone to reduce the hassles of managing the source
 * */

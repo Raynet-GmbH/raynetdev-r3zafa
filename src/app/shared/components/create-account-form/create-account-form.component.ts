@@ -1,18 +1,27 @@
-import {CommonModule} from '@angular/common';
-import {Component, inject, NgModule} from '@angular/core';
-import {Router, RouterModule} from '@angular/router';
+import {NgIf} from '@angular/common';
+import {Component, inject} from '@angular/core';
+import {Router, RouterLinkWithHref} from '@angular/router';
 import {ValidationCallbackData} from 'devextreme/ui/validation_rules';
 import {DxFormModule} from 'devextreme-angular/ui/form';
 import {DxLoadIndicatorModule} from 'devextreme-angular/ui/load-indicator';
 import notify from 'devextreme/ui/notify';
 import {AuthService} from '../../services';
 import {RegistrationForm} from "../../../interfaces/registrationForm.interface";
+import {DxTabsModule} from "devextreme-angular";
 
 
 @Component({
   selector: 'app-create-account-form',
+  standalone: true,
   templateUrl: './create-account-form.component.html',
-  styleUrls: ['./create-account-form.component.scss']
+  styleUrls: ['./create-account-form.component.scss'],
+  imports: [
+    DxTabsModule,
+    DxFormModule,
+    RouterLinkWithHref,
+    DxLoadIndicatorModule,
+    NgIf
+  ],
 })
 export class CreateAccountFormComponent {
 
@@ -43,7 +52,8 @@ export class CreateAccountFormComponent {
     // read data
     const {email, password, displayName, phoneNumber} = this.formData;
 
-    const result = await this.authService.createAccount(email, password, displayName, phoneNumber);
+    const result = await this.authService
+      .createAccount(email, password, displayName, phoneNumber);
 
     this.loading = false;
 
@@ -67,17 +77,4 @@ export class CreateAccountFormComponent {
     return e.value && e.value.length <= 15;
   };
 
-}
-
-@NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    DxFormModule,
-    DxLoadIndicatorModule
-  ],
-  declarations: [CreateAccountFormComponent],
-  exports: [CreateAccountFormComponent]
-})
-export class CreateAccountFormModule {
 }
