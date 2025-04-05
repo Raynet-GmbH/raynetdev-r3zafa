@@ -1,1 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
+
+.create-account-form {
+  .dx-widget {
+    gap: 1.5rem;
+  }
+
+  .dx-field-item {
+    padding: unset;
+  }
+
+  .dx-layout-manager.dx-layout-manager-one-col .dx-box-item:not(:first-child) .dx-single-column-item-content > .dx-field-item {
+    padding-top: unset;
+  }
+
+  .dx-field-item:not(.dx-field-item-has-group):not(.dx-field-item-has-tabs):not(.dx-first-row):not(.dx-label-v-align) {
+    padding-top: unset;
+  }
+
+
+}
+
+.login-form {
+
+  .dx-widget {
+    gap: 1rem;
+  }
+
+  .dx-field-item:not(.dx-field-item-has-group):not(.dx-field-item-has-tabs):not(.dx-first-row):not(.dx-label-v-align) {
+    padding-top: unset;
+  }
+
+  .dx-field-item:not(.dx-field-item-has-group):not(.dx-field-item-has-tabs):not(.dx-first-row):not(.dx-label-v-align) {
+    padding-top: unset;
+  }
+
+  .dx-layout-manager .dx-field-item {
+    padding-bottom: unset;
+  }
+
+  .dx-layout-manager .dx-field-item .link {
+    margin-bottom: 2rem;
+  }
+}

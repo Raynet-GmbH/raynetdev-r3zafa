@@ -1,17 +1,20 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
-import { IUser } from 'src/user';
+import {Injectable} from '@angular/core';
+import {CanActivate, Router, ActivatedRouteSnapshot} from '@angular/router';
+import {IUser} from 'src/user';
 
 
 const defaultPath = '/';
-const defaultUser = {
-  email: 'sandra@example.com',
-  avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
+const defaultUser: IUser = {
+  avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/07.png',
+  email: 'reza@example.com',
+  displayName: 'Reza',
+  phoneNumber: '+49 151 240 123 87'
 };
 
 @Injectable()
 export class AuthService {
   private _user: IUser | null = defaultUser;
+
   get loggedIn(): boolean {
     return !!this._user;
   }
@@ -21,22 +24,22 @@ export class AuthService {
     this._lastAuthenticatedPath = value;
   }
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+  }
 
   async logIn(email: string, password: string) {
 
     try {
       // Send request
       console.log(email, password);
-      this._user = { ...defaultUser, email };
-      this.router.navigate([this._lastAuthenticatedPath]);
+      this._user = {...defaultUser, email};
+      await this.router.navigate([this._lastAuthenticatedPath]);
 
       return {
         isOk: true,
         data: this._user
       };
-    }
-    catch {
+    } catch {
       return {
         isOk: false,
         message: "Authentication failed"
@@ -52,8 +55,7 @@ export class AuthService {
         isOk: true,
         data: this._user
       };
-    }
-    catch {
+    } catch {
       return {
         isOk: false,
         data: null
@@ -61,17 +63,22 @@ export class AuthService {
     }
   }
 
-  async createAccount(email: string, password: string) {
-    try {
-      // Send request
-      console.log(email, password);
+  async createAccount(email: string, password: string, displayName: string, phoneNumber: string) {
 
-      this.router.navigate(['/create-account']);
-      return {
-        isOk: true
+    // Send request
+    try {
+      console.log(email, password, displayName, phoneNumber);
+
+      this._user = {
+        ...this._user,
+        email,
+        displayName,
+        phoneNumber
       };
-    }
-    catch {
+
+      await this.router.navigate(['/create-account']);
+      return {isOk: true};
+    } catch {
       return {
         isOk: false,
         message: "Failed to create account"
@@ -87,13 +94,13 @@ export class AuthService {
       return {
         isOk: true
       };
-    }
-    catch {
+    } catch {
       return {
         isOk: false,
         message: "Failed to change password"
       }
-    };
+    }
+
   }
 
   async resetPassword(email: string) {
@@ -104,8 +111,7 @@ export class AuthService {
       return {
         isOk: true
       };
-    }
-    catch {
+    } catch {
       return {
         isOk: false,
         message: "Failed to reset password"
@@ -115,13 +121,14 @@ export class AuthService {
 
   async logOut() {
     this._user = null;
-    this.router.navigate(['/login-form']);
+    await this.router.navigate(['/login-form']);
   }
 }
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(private router: Router, private authService: AuthService) {
+  }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = this.authService.loggedIn;
@@ -134,12 +141,12 @@ export class AuthGuardService implements CanActivate {
 
     if (isLoggedIn && isAuthForm) {
       this.authService.lastAuthenticatedPath = defaultPath;
-      this.router.navigate([defaultPath]);
+      this.router.navigate([defaultPath]).then();
       return false;
     }
 
     if (!isLoggedIn && !isAuthForm) {
-      this.router.navigate(['/login-form']);
+      this.router.navigate(['/login-form']).then();
     }
 
     if (isLoggedIn) {

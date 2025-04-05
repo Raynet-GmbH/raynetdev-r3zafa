@@ -1,4 +1,7 @@
+// user.ts
 export interface IUser {
+  avatarUrl?: string;
   email: string;
-  avatarUrl?: string
+  displayName: string;
+  phoneNumber: string;
 }

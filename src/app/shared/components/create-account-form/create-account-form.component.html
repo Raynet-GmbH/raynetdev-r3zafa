@@ -1,39 +1,100 @@
 <form class="create-account-form" (submit)="onSubmit($event)">
+
   <dx-form [formData]="formData" [disabled]="loading">
 
-    <dxi-item dataField="email" editorType="dxTextBox"
-      [editorOptions]="{ stylingMode: 'filled', placeholder: 'Email', mode: 'email' }">
+    <!-- Display Name -->
+    <dxi-item dataField="displayName"
+              editorType="dxTextBox"
+              [editorOptions]="{ stylingMode: 'filled', placeholder: 'Display Name' }">
+
       <dxo-label [visible]="false"></dxo-label>
+
+      <dxi-validation-rule type="required"
+                           [message]="isRequiredMsg">
+      </dxi-validation-rule>
+
+      <dxi-validation-rule type="custom"
+                           [validationCallback]="validateDisplayName"
+                           [message]="maxLength15CharMsg">
+      </dxi-validation-rule>
+
     </dxi-item>
 
-    <dxi-item dataField="password" editorType="dxTextBox"
-      [editorOptions]="{ stylingMode: 'filled', placeholder: 'Password', mode: 'password' }">
+    <!-- Email -->
+    <dxi-item dataField="email"
+              editorType="dxTextBox"
+              [editorOptions]="{ stylingMode: 'filled', placeholder: 'Email', mode: 'email' }">
+
       <dxo-label [visible]="false"></dxo-label>
+      <dxi-validation-rule type="required" [message]="isRequiredMsg"></dxi-validation-rule>
+      <dxi-validation-rule type="email" message="Enter a valid email"></dxi-validation-rule>
+
     </dxi-item>
 
-    <dxi-item dataField="confirmedPassword" editorType="dxTextBox"
-      [editorOptions]="{ stylingMode: 'filled', placeholder: 'Confirm Password', mode: 'password' }">
+
+    <!-- Password -->
+    <dxi-item dataField="password"
+              editorType="dxTextBox"
+              [editorOptions]="{ stylingMode: 'filled', placeholder: 'Password', mode: 'password' }">
+
       <dxo-label [visible]="false"></dxo-label>
+      <dxi-validation-rule type="required" [message]="isRequiredMsg"></dxi-validation-rule>
+
     </dxi-item>
 
+    <!-- Confirm Password -->
+    <dxi-item dataField="confirmedPassword"
+              editorType="dxTextBox"
+              [editorOptions]="{ stylingMode: 'filled', placeholder: 'Confirm Password', mode: 'password' }">
+
+      <dxo-label [visible]="false"></dxo-label>
+      <dxi-validation-rule type="required" message="Confirm your password"></dxi-validation-rule>
+      <dxi-validation-rule type="custom"
+                           [validationCallback]="confirmPassword"
+                           message="Passwords must match">
+      </dxi-validation-rule>
+
+    </dxi-item>
+
+
+    <!-- Phone Number -->
+    <dxi-item dataField="phoneNumber"
+              editorType="dxTextBox"
+              [editorOptions]="{ stylingMode: 'filled', placeholder: '+49 151 240 123 87' }">
+
+      <dxo-label [visible]="false"></dxo-label>
+      <dxi-validation-rule type="required" [message]="isRequiredMsg"></dxi-validation-rule>
+      <dxi-validation-rule type="custom"
+                           [validationCallback]="validatePhoneNumber"
+                           message="Enter valid international phone number">
+      </dxi-validation-rule>
+
+    </dxi-item>
+
+    <!-- Policy -->
     <dxi-item>
       <div class='policy-info'>
         By creating an account, you agree to the <a routerLink="#">Terms of Service</a> and <a routerLink="#">Privacy
-          Policy</a>
+        Policy</a>
       </div>
     </dxi-item>
 
+    <!-- Button -->
     <dxi-item itemType="button">
-      <dxo-button-options width="100%" type="default" [useSubmitBehavior]="true" [template]="'createAccountTemplate'">
+      <dxo-button-options width="100%" type="default"
+                          [useSubmitBehavior]="true"
+                          [template]="'createAccountTemplate'">
       </dxo-button-options>
     </dxi-item>
 
+    <!-- Link -->
     <dxi-item>
       <div class="login-link">
         Have an account? <a routerLink="/login">Sign In</a>
       </div>
     </dxi-item>
 
+    <!-- generating button content -->
     <ng-container *dxTemplate="let item of 'createAccountTemplate'">
       <div>
         <span class="dx-button-text">
@@ -47,4 +108,5 @@
     </ng-container>
 
   </dx-form>
+
 </form>

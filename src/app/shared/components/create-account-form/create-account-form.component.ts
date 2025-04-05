@@ -1,12 +1,19 @@
-import { CommonModule } from '@angular/common';
-import { Component, NgModule } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { ValidationCallbackData } from 'devextreme/ui/validation_rules';
-import { DxFormModule } from 'devextreme-angular/ui/form';
-import { DxLoadIndicatorModule } from 'devextreme-angular/ui/load-indicator';
+import {CommonModule} from '@angular/common';
+import {Component, inject, NgModule} from '@angular/core';
+import {Router, RouterModule} from '@angular/router';
+import {ValidationCallbackData} from 'devextreme/ui/validation_rules';
+import {DxFormModule} from 'devextreme-angular/ui/form';
+import {DxLoadIndicatorModule} from 'devextreme-angular/ui/load-indicator';
 import notify from 'devextreme/ui/notify';
-import { AuthService } from '../../services';
+import {AuthService} from '../../services';
 
+interface FormData {
+  email: string;
+  password: string;
+  passwordConfirm: string;
+  displayName: string;
+  phoneNumber: string;
+}
 
 @Component({
   selector: 'app-create-account-form',
@@ -14,30 +21,63 @@ import { AuthService } from '../../services';
   styleUrls: ['./create-account-form.component.scss']
 })
 export class CreateAccountFormComponent {
-  loading = false;
-  formData: any = {};
+  readonly isRequiredMsg = 'Is required';
+  readonly maxLength15CharMsg = 'Max 15 characters';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  private authService: AuthService = inject(AuthService);
+  private router: Router = inject(Router);
+
+  // vars
+  loading = false;
+  formData: FormData = {
+    email: '',
+    password: '',
+    passwordConfirm: '',
+    displayName: '',
+    phoneNumber: ''
+  };
+
 
   async onSubmit(e: Event) {
     e.preventDefault();
-    const { email, password } = this.formData;
+
+    // pwd check
+    if (this.formData.password !== this.formData.passwordConfirm) {
+      notify('Passwords do not match', 'error', 2000);
+      return;
+    }
+
     this.loading = true;
 
-    const result = await this.authService.createAccount(email, password);
+    // read data
+    const {email, password, displayName, phoneNumber} = this.formData;
+
+    const result = await this.authService.createAccount(email, password, displayName, phoneNumber);
+
     this.loading = false;
 
     if (result.isOk) {
-      this.router.navigate(['/login-form']);
-    } else {
-      notify(result.message, 'error', 2000);
-    }
+      notify('Registration successful', 'success', 2000);
+      await this.router.navigate(['/login-form']);
+    } else notify(result.message, 'error', 2000);
+
   }
 
   confirmPassword = (e: ValidationCallbackData) => {
     return e.value === this.formData.password;
   }
+
+  validatePhoneNumber = (e: ValidationCallbackData) => {
+    const phoneRegex = /^\+\d{1,3}(?:\s?\d+)*$/;
+    return phoneRegex.test(e.value);
+  };
+
+  validateDisplayName = (e: ValidationCallbackData) => {
+    return e.value && e.value.length <= 15;
+  };
+
 }
+
 @NgModule({
   imports: [
     CommonModule,
@@ -45,7 +85,8 @@ export class CreateAccountFormComponent {
     DxFormModule,
     DxLoadIndicatorModule
   ],
-  declarations: [ CreateAccountFormComponent ],
-  exports: [ CreateAccountFormComponent ]
+  declarations: [CreateAccountFormComponent],
+  exports: [CreateAccountFormComponent]
 })
-export class CreateAccountFormModule { }
+export class CreateAccountFormModule {
+}
