@@ -1,8 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+@import "src/themes/generated/variables.base";
 
 .create-account-form {
   .dx-widget {
-    gap: 1.5rem;
+    gap: 1.7rem;
   }
 
   .dx-field-item {
@@ -23,7 +23,12 @@
 .login-form {
 
   .dx-widget {
-    gap: 1rem;
+    gap: 1.7rem;
+  }
+
+  .form-text {
+    margin: 0;
+    color: rgba($base-text-color, alpha($base-text-color) * 0.7);
   }
 
   .dx-field-item:not(.dx-field-item-has-group):not(.dx-field-item-has-tabs):not(.dx-first-row):not(.dx-label-v-align) {
@@ -39,6 +44,12 @@
   }
 
   .dx-layout-manager .dx-field-item .link {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
+}
+
+
+.profile-content .dx-field-item-label-location-top {
+  display: block;
+  padding: 0 0 0.5rem;
 }

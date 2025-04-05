@@ -1,6 +1,7 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {CanActivate, Router, ActivatedRouteSnapshot} from '@angular/router';
-import {IUser} from 'src/user';
+import {IUser} from '../../interfaces/user.interface';
+import {GetUserResponseInterface} from "../../interfaces/get-user-response.interface";
 
 
 const defaultPath = '/';
@@ -13,18 +14,31 @@ const defaultUser: IUser = {
 
 @Injectable()
 export class AuthService {
+
+  // injects
+  private router: Router = inject(Router);
+
+  // vars
   private _user: IUser | null = defaultUser;
+  private _lastAuthenticatedPath: string = defaultPath;
+
 
   get loggedIn(): boolean {
     return !!this._user;
   }
 
-  private _lastAuthenticatedPath: string = defaultPath;
-  set lastAuthenticatedPath(value: string) {
-    this._lastAuthenticatedPath = value;
+
+
+  async getUser(): Promise<GetUserResponseInterface> {
+    try { /* Send request*/
+      return {isOk: true, data: this._user};
+    } catch {
+      return {isOk: false, data: null};
+    }
   }
 
-  constructor(private router: Router) {
+  set lastAuthenticatedPath(value: string) {
+    this._lastAuthenticatedPath = value;
   }
 
   async logIn(email: string, password: string) {
@@ -47,24 +61,7 @@ export class AuthService {
     }
   }
 
-  async getUser() {
-    try {
-      // Send request
-
-      return {
-        isOk: true,
-        data: this._user
-      };
-    } catch {
-      return {
-        isOk: false,
-        data: null
-      };
-    }
-  }
-
   async createAccount(email: string, password: string, displayName: string, phoneNumber: string) {
-
     // Send request
     try {
       console.log(email, password, displayName, phoneNumber);
@@ -100,7 +97,6 @@ export class AuthService {
         message: "Failed to change password"
       }
     }
-
   }
 
   async resetPassword(email: string) {
@@ -127,8 +123,10 @@ export class AuthService {
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-  constructor(private router: Router, private authService: AuthService) {
-  }
+
+  // injects
+  private authService: AuthService = inject(AuthService);
+  private router: Router = inject(Router);
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = this.authService.loggedIn;
@@ -145,13 +143,8 @@ export class AuthGuardService implements CanActivate {
       return false;
     }
 
-    if (!isLoggedIn && !isAuthForm) {
-      this.router.navigate(['/login-form']).then();
-    }
-
-    if (isLoggedIn) {
-      this.authService.lastAuthenticatedPath = route.routeConfig?.path || defaultPath;
-    }
+    if (!isLoggedIn && !isAuthForm) this.router.navigate(['/login-form']).then();
+    if (isLoggedIn) this.authService.lastAuthenticatedPath = route.routeConfig?.path || defaultPath;
 
     return isLoggedIn || isAuthForm;
   }

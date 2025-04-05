@@ -7,7 +7,7 @@ import {DxButtonModule} from 'devextreme-angular/ui/button';
 import {DxToolbarModule} from 'devextreme-angular/ui/toolbar';
 
 import {Router} from '@angular/router';
-import {IUser} from 'src/user';
+import {IUser} from '../../../interfaces/user.interface';
 
 @Component({
   selector: 'app-header',

@@ -1,32 +1,57 @@
 <h2 class="content-block">Profile</h2>
 
 <div class="content-block dx-card responsive-paddings">
-  <div style="display: flex; justify-content: space-around;">
-    <div class="form-avatar">
-      <img
-        src="https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/{{
-          employee.Picture
-        }}"
-      />
+  <div class="profile-overview">
+
+    <div class="profile-overview-image">
+      <img src="https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/{{employee.Picture}}" alt="profile picture"/>
     </div>
-      <div class="profile-border responsive-paddings">
-        <div>Tickets assigned to me:</div>
-        {{ this.employee.AssignedTasks }}
+
+    <section class="profile-overview-info">
+
+
+      <h4 class="reset profile-overview-info-title">
+        {{ this.employee.Prefix }} {{ this.employee.FirstName }} {{ this.employee.LastName }}
+      </h4>
+
+      <h6 class="reset profile-overview-info-subtitle">
+        {{ this.employee.Position }}
+      </h6>
+
+
+      <div class="profile-overview-info-more">
+        <p class="reset profile-overview-info-item">
+          <span class="profile-overview-info-more-badge">Tickets assigned to me</span>
+          <span class="profile-overview-info-more-badge-data">{{ this.employee.AssignedTasks }}</span>
+        </p>
+
+
+        <p class="reset profile-overview-info-item">
+          <span class="profile-overview-info-more-badge">Position</span>
+          <span class="profile-overview-info-more-badge-data">{{ this.employee.Position }}</span>
+        </p>
       </div>
 
-      <div class="profile-border responsive-paddings">
-        <div>Position:</div>
-        {{ this.employee.Position }}
-      </div>
+
+    </section>
+
   </div>
 </div>
 
-<div class="content-block dx-card responsive-paddings">
-  <dx-form
-    id="form"
-    [formData]="employee"
-    labelLocation="top"
-    [colCountByScreen]="colCountByScreen"
-  >
+<div class="profile-content content-block dx-card responsive-paddings">
+  <dx-form id="form" [formData]="employee" labelLocation="top" [colCountByScreen]="colCountByScreen">
+    <dxi-item dataField="ID" [editorOptions]="{ readOnly: true }"></dxi-item>
+    <dxi-item dataField="DisplayName"></dxi-item>
+    <dxi-item dataField="FirstName"></dxi-item>
+    <dxi-item dataField="LastName"></dxi-item>
+    <dxi-item dataField="PhoneNumber" [editorOptions]="{ readOnly: true }"></dxi-item>
+    <dxi-item dataField="Prefix"></dxi-item>
+    <dxi-item dataField="Position"></dxi-item>
+    <dxi-item dataField="Picture"></dxi-item>
+    <dxi-item dataField="BirthDate"></dxi-item>
+    <dxi-item dataField="HireDate"></dxi-item>
+    <dxi-item dataField="AssignedTasks"></dxi-item>
+    <dxi-item dataField="Notes"></dxi-item>
+    <dxi-item dataField="Address"></dxi-item>
   </dx-form>
 </div>

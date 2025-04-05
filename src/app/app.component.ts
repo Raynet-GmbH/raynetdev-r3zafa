@@ -17,3 +17,21 @@ export class AppComponent  {
     return this.authService.loggedIn;
   }
 }
+
+
+/*
+* todo
+* move routing to components.
+* use typescript types and interface definitions instead of returning any
+* use BehaviorSubject instead of Using normal variables in services.
+* use Reactive State Management for:
+* - Handling Asynchronous Operations
+* - Optimized User Session Handling (example : BehaviorSubject, ReplaySubject )
+* - Managing HTTP Requests
+* - Simplified Error Handling
+* - Avoiding State Management Boilerplate
+* - Clean Subscriptions
+* - Handling Multiple Observable Streams
+* - refactor styles and move reusable stuff inside a separate folder
+* - add JS Documentation to code
+* */

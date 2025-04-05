@@ -6,14 +6,8 @@ import {DxFormModule} from 'devextreme-angular/ui/form';
 import {DxLoadIndicatorModule} from 'devextreme-angular/ui/load-indicator';
 import notify from 'devextreme/ui/notify';
 import {AuthService} from '../../services';
+import {RegistrationForm} from "../../../interfaces/registrationForm.interface";
 
-interface FormData {
-  email: string;
-  password: string;
-  passwordConfirm: string;
-  displayName: string;
-  phoneNumber: string;
-}
 
 @Component({
   selector: 'app-create-account-form',
@@ -21,15 +15,18 @@ interface FormData {
   styleUrls: ['./create-account-form.component.scss']
 })
 export class CreateAccountFormComponent {
+
+  // constants
   readonly isRequiredMsg = 'Is required';
   readonly maxLength15CharMsg = 'Max 15 characters';
 
+  // injects
   private authService: AuthService = inject(AuthService);
   private router: Router = inject(Router);
 
   // vars
   loading = false;
-  formData: FormData = {
+  formData: RegistrationForm = {
     email: '',
     password: '',
     passwordConfirm: '',
@@ -40,12 +37,6 @@ export class CreateAccountFormComponent {
 
   async onSubmit(e: Event) {
     e.preventDefault();
-
-    // pwd check
-    if (this.formData.password !== this.formData.passwordConfirm) {
-      notify('Passwords do not match', 'error', 2000);
-      return;
-    }
 
     this.loading = true;
 
