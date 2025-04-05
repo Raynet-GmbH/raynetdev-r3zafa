@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /bazel-out
+/src/themes/generated
 
 # Node
 /node_modules
@@ -40,4 +41,4 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-/src/themes/generated/
+
